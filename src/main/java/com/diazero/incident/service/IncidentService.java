@@ -7,12 +7,9 @@ import com.diazero.incident.exceptions.BadRequestException;
 import com.diazero.incident.repository.IncidentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,12 +18,14 @@ public class IncidentService {
 
     private final IncidentRepository incidentRepository;
 
+    private final IncidentTransformer incidentTransformer;
+
     public List<Incident> findAll() {
         return incidentRepository.findAll();
     }
 
     public Page<Incident> findPageableIncident(Pageable pageable) {
-        return incidentRepository.findAll(PageRequest.of(0, 20, Sort.by("createdAt").descending()));
+        return incidentRepository.findAll(pageable);
     }
 
     public Incident findIncididentByIdOrThrowBadRequestException(Long id) {
@@ -35,29 +34,12 @@ public class IncidentService {
     }
 
     public Incident save(IncidentPostRequestBody incidentPostRequestBody) {
-
-        Incident incident = Incident.builder()
-                .name(incidentPostRequestBody.getName())
-                .description(incidentPostRequestBody.getDescription())
-                .createdAt(LocalDate.now())
-                .build();
-
-        return incidentRepository.save(incident);
+        return incidentRepository.save(incidentTransformer.transform(incidentPostRequestBody));
     }
 
     public Incident replace(IncidentPutRequestBody incidentPutRequestBody) {
-
-        findIncididentByIdOrThrowBadRequestException(incidentPutRequestBody.getIdIncident());
-
-        Incident incident = Incident.builder()
-                .idIncident(incidentPutRequestBody.getIdIncident())
-                .name(incidentPutRequestBody.getName())
-                .description(incidentPutRequestBody.getDescription())
-                .createdAt(findIncididentByIdOrThrowBadRequestException(incidentPutRequestBody.getIdIncident()).getCreatedAt())
-                .updatedAt(LocalDate.now())
-                .build();
-
-        return incidentRepository.save(incident);
+        Incident incident = findIncididentByIdOrThrowBadRequestException(incidentPutRequestBody.getIdIncident());
+        return incidentRepository.save(incidentTransformer.transform(incidentPutRequestBody, incident));
     }
 
     public void delete(Long id) {

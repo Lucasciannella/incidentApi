@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,36 +27,37 @@ public class IncidentController {
     private final IncidentService incidentService;
 
     @GetMapping("/incidents")
+    @Operation(summary = "Find all incidents")
     public ResponseEntity<List<Incident>> findAll() {
         return ResponseEntity.ok(incidentService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Incident> findById(@PathVariable Long id){
+    @Operation(summary = "Find incident by id")
+    public ResponseEntity<Incident> findById(@PathVariable Long id) {
         return ResponseEntity.ok(incidentService.findIncididentByIdOrThrowBadRequestException(id));
     }
 
     @GetMapping("/last-twenty/incidents")
     @Operation(summary = "List the last twenty incidents")
-    public ResponseEntity<Page<Incident>> findPageableIncident(@ParameterObject Pageable pageable) {
+    public ResponseEntity<Page<Incident>> findPageableIncident(@ParameterObject @PageableDefault(page = 0, size = 20, sort = "idIncident", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(incidentService.findPageableIncident(pageable));
     }
 
     @PostMapping
+    @Operation(summary = "Create a new incident")
     public ResponseEntity<Incident> save(@RequestBody IncidentPostRequestBody incidentPostRequestBody) {
         return new ResponseEntity<>(incidentService.save(incidentPostRequestBody), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @Operation(summary = "Update a incident")
     public ResponseEntity<Incident> replace(@RequestBody IncidentPutRequestBody incidentPutRequestBody) {
         return ResponseEntity.ok(incidentService.replace(incidentPutRequestBody));
     }
 
     @DeleteMapping("/{id}")
-    @ApiResponses(value= {
-            @ApiResponse(responseCode = "204", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "When incident does not exist in database")
-    })
+    @Operation(summary = "Delete a incident")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         incidentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
