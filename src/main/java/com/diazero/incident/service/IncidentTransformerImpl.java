@@ -3,6 +3,8 @@ package com.diazero.incident.service;
 import com.diazero.incident.dto.IncidentPostRequestBody;
 import com.diazero.incident.dto.IncidentPutRequestBody;
 import com.diazero.incident.entity.Incident;
+import com.diazero.incident.entity.Status;
+import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ public class IncidentTransformerImpl implements IncidentTransformer {
                 .name(incidentPostRequestBody.getName())
                 .description(incidentPostRequestBody.getDescription())
                 .createdAt(LocalDate.now())
+                .status(Status.NEW)
                 .build();
     }
 
@@ -28,6 +31,22 @@ public class IncidentTransformerImpl implements IncidentTransformer {
                 .description(incidentPutRequestBody.getDescription())
                 .createdAt(incident.getCreatedAt())
                 .updatedAt(LocalDate.now())
+                .status(Status.UPDATED)
                 .build();
     }
+
+    @Override
+    public Incident transform(Incident incident) {
+        return Incident.builder()
+                .idIncident(incident.getIdIncident())
+                .name(incident.getName())
+                .description(incident.getDescription())
+                .createdAt(incident.getCreatedAt())
+                .updatedAt(incident.getUpdatedAt())
+                .closedAt(LocalDate.now())
+                .status(Status.CLOSED)
+                .build();
+    }
+
+
 }

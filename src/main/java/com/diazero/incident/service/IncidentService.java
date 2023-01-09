@@ -42,6 +42,11 @@ public class IncidentService {
         return incidentRepository.save(incidentTransformer.transform(incidentPutRequestBody, incident));
     }
 
+    public Incident close(Long id){
+        Incident incident = findIncididentByIdOrThrowBadRequestException(id);
+        return incidentRepository.save(incidentTransformer.transform(incident));
+    }
+
     public void delete(Long id) {
         incidentRepository.delete(findIncididentByIdOrThrowBadRequestException(id));
     }

@@ -21,43 +21,59 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/api/incident-management")
+@RequestMapping("/v1/api/incident-management/incidents")
 public class IncidentController {
 
     private final IncidentService incidentService;
 
-    @GetMapping("/incidents")
-    @Operation(summary = "Find all incidents")
+    @GetMapping
+    @Operation(summary = "Find all incidents", description = "it is recommended to use this method if you need to retrieve all records from the database")
+    @ApiResponse(responseCode = "204", description = "Successful operation")
     public ResponseEntity<List<Incident>> findAll() {
         return ResponseEntity.ok(incidentService.findAll());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Find incident by id")
+    @Operation(summary = "Find incident by id", description = "This method will bring a specific record from the database if it exists")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
     public ResponseEntity<Incident> findById(@PathVariable Long id) {
         return ResponseEntity.ok(incidentService.findIncididentByIdOrThrowBadRequestException(id));
     }
 
-    @GetMapping("/last-twenty/incidents")
-    @Operation(summary = "List the last twenty incidents")
+    @GetMapping("/page-incidents")
+    @Operation(summary = "List the last twenty incidents Paginated", description = "This method is pageable, by default it will bring the last 20 records from the table, however you can use url parameters to change the search and bring whatever is necessary for you")
+    @ApiResponse(responseCode = "400", description = "When customer Does Not exist in database")
     public ResponseEntity<Page<Incident>> findPageableIncident(@ParameterObject @PageableDefault(page = 0, size = 20, sort = "idIncident", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(incidentService.findPageableIncident(pageable));
     }
 
     @PostMapping
-    @Operation(summary = "Create a new incident")
+    @Operation(summary = "Create a new incident", description = "In this method you will add a new incident to your database")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
     public ResponseEntity<Incident> save(@RequestBody IncidentPostRequestBody incidentPostRequestBody) {
         return new ResponseEntity<>(incidentService.save(incidentPostRequestBody), HttpStatus.CREATED);
     }
 
     @PutMapping
-    @Operation(summary = "Update a incident")
+    @Operation(summary = "Update a incident", description = "This method is used to update the entire record of an incident")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
     public ResponseEntity<Incident> replace(@RequestBody IncidentPutRequestBody incidentPutRequestBody) {
         return ResponseEntity.ok(incidentService.replace(incidentPutRequestBody));
     }
 
+    @PatchMapping("/{id}")
+    @Operation(summary = "Close a incident", description = "This method is used to close a incident")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
+    public ResponseEntity<Incident> close(@PathVariable Long id) {
+        return ResponseEntity.ok(incidentService.close(id));
+    }
+
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a incident")
+    @Operation(summary = "Delete a incident",description = "This method excludes a unique incident")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "When customer Does Not exist in database")
+    })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         incidentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
