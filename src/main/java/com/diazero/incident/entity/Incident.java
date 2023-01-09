@@ -22,9 +22,11 @@ public class Incident {
     private Long idIncident;
 
     @Schema(name = "Incident name",example = "SQL INJECTION",required= true)
+    @NotNull(message = "invalid name, please try again")
     private String name;
 
     @Schema(name = "Incident description",example = "SQL INJECTION are cybe security incident",required= true)
+    @NotNull(message = "invalid description, please try again ")
     private String description;
 
     @Schema(name = "Incident created date", example = "2023/01/07")

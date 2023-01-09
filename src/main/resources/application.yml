@@ -19,3 +19,14 @@ logging:
 
 springdoc:
   packages-to-Scan: com.diazero.incident
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+info:
+  app: Incident's API
+  website: https://Linkedin.com/in/Lucasciannella
+  github: https://github.com/lucasciannella/incidentApi

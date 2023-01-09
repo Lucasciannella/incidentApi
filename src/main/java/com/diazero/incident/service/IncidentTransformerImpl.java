@@ -4,7 +4,6 @@ import com.diazero.incident.dto.IncidentPostRequestBody;
 import com.diazero.incident.dto.IncidentPutRequestBody;
 import com.diazero.incident.entity.Incident;
 import com.diazero.incident.entity.Status;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -47,6 +46,4 @@ public class IncidentTransformerImpl implements IncidentTransformer {
                 .status(Status.CLOSED)
                 .build();
     }
-
-
 }

@@ -20,11 +20,11 @@ public class IncidentService {
 
     private final IncidentTransformer incidentTransformer;
 
-    public List<Incident> findAll() {
+    public List<Incident> findAllNonPageable() {
         return incidentRepository.findAll();
     }
 
-    public Page<Incident> findPageableIncident(Pageable pageable) {
+    public Page<Incident> findAllPageable(Pageable pageable) {
         return incidentRepository.findAll(pageable);
     }
 
@@ -42,9 +42,9 @@ public class IncidentService {
         return incidentRepository.save(incidentTransformer.transform(incidentPutRequestBody, incident));
     }
 
-    public Incident close(Long id){
+    public void close(Long id) {
         Incident incident = findIncididentByIdOrThrowBadRequestException(id);
-        return incidentRepository.save(incidentTransformer.transform(incident));
+        incidentRepository.save(incidentTransformer.transform(incident));
     }
 
     public void delete(Long id) {

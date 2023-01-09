@@ -31,7 +31,7 @@ public class IncidentController {
     @Operation(summary = "Find all incidents", description = "it is recommended to use this method if you need to retrieve all records from the database")
     @ApiResponse(responseCode = "204", description = "Successful operation")
     public ResponseEntity<List<Incident>> findAll() {
-        return ResponseEntity.ok(incidentService.findAll());
+        return ResponseEntity.ok(incidentService.findAllNonPageable());
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class IncidentController {
     @Operation(summary = "List the last twenty incidents Paginated", description = "This method is pageable, by default it will bring the last 20 records from the table, however you can use url parameters to change the search and bring whatever is necessary for you")
     @ApiResponse(responseCode = "400", description = "When customer Does Not exist in database")
     public ResponseEntity<Page<Incident>> findPageableIncident(@ParameterObject @PageableDefault(page = 0, size = 20, sort = "idIncident", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(incidentService.findPageableIncident(pageable));
+        return ResponseEntity.ok(incidentService.findAllPageable(pageable));
     }
 
     @PostMapping
@@ -64,9 +64,10 @@ public class IncidentController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Close a incident", description = "This method is used to close a incident")
-    @ApiResponse(responseCode = "200", description = "Successful operation")
-    public ResponseEntity<Incident> close(@PathVariable Long id) {
-        return ResponseEntity.ok(incidentService.close(id));
+    @ApiResponse(responseCode = "204", description = "Successful operation")
+    public ResponseEntity<Void> close(@PathVariable Long id) {
+         incidentService.close(id);
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
