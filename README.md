@@ -84,9 +84,85 @@ CREATE TABLE `incident` (
 
 Todas as configurações foram feitas, a aplicação esta rodando logo você pode acompanhar a documentação dos endpoints [clicando aqui]( http://localhost:8080/swagger-ui/index.html#)
 
+![](https://media.giphy.com/media/X5teVOTidUW1xQO1kg/giphy.gif)
+
 
 
 ## Observações:
 
+### Tecnologias utilizadas:
 
+- Lombock: visando reduzir a quantidade de código escrito ;
+
+- H2 database: para os testes de repositorio;
+
+- Spring validation: para as validações de dominio;
+
+- Spring actuator: Um plus para poder mostrar o estado da aplicação e algumas metricas;
+
+  ```yaml
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: info, health, metrics
+  ```
+
+  Disponível nos endpoints:
+
+  - server:port/actuator/info
+  - server:port/actuator/health
+  - server:port/actuator/metrics
+
+  
+
+  ### Notas:
+
+  Primeiro quero deixar claro que foi prazeroso fazer este desafio embora não tenha feito tudo que desejava deixo aqui alguns pontos
+
+  
+
+- Método que retorna os ultimos 20 registros:
+
+    ​	Eu optei por criar um método paginado, onde setei por default os parâmetros de busca do mesmo, mas, poderia ter solucionado 	de diversas maneiras, essa foi a que encontrei sendo mais plausível por que acreditei que ganharia com a paginação podendo 	ser usada não somente para esta função, dando uma certa versatilidade e resolvendo o problema da mesma maneira, exemplo: 	criar um método e passar uma Query nativa com @Query, ou utilizar do própio dialeto do Hibernate.
+
+    
+
+- Maior Cobertura nos testes:
+  
+   Poderia ter feito os testes de integração do sistema e testar as constrains de inserção do banco de dados.
+
+- Criei um método além do requisitado:
+	Não sei o que desejavam com o atributo closed at, porém tive diversas ideias, pensei até em criar um registo de backup das remoções, mas achei inviável já que estava explicito que queriam uma função delete,com isso criei um método void PATCH para atualizar essa hora e o atributo novo o STATUS, que é variavel de acordo com o "momento" do incidente.
+  
+  
+- Criei um método Trasformer para abstrair o builder da camada de serviço:
+	Você avaliador, vai econtrar esse método na interface IncidentTranformer e na classe IncidentTransformerImpl, criei para deixar o código mais limpo e manutenível,após ter  notado que estava repetindo código. 
+	Utilizei da sobrecarga para me ajudar, porém um dos métodos não me pareceu fazer muito sentido e eu pensarei em uma possível refatoração pra isto.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
