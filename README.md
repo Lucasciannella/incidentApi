@@ -130,15 +130,20 @@ Todas as configurações foram feitas, a aplicação esta rodando logo você pod
 
 - Maior Cobertura nos testes:
   
-   Poderia ter feito os testes de integração do sistema e testar as constrains de inserção do banco de dados.
+   ​	Poderia ter feito os testes de integração do sistema e testar as constrains de inserção do banco de dados.
 
+  
+  
 - Criei um método além do requisitado:
-	Não sei o que desejavam com o atributo closed at, porém tive diversas ideias, pensei até em criar um registo de backup das remoções, mas achei inviável já que estava explicito que queriam uma função delete,com isso criei um método void PATCH para atualizar essa hora e o atributo novo o STATUS, que é variavel de acordo com o "momento" do incidente.
+	
+  Não sei o que desejavam com o atributo closed at, porém tive diversas ideias, pensei até em criar um registo de backup das remoções, mas achei inviável já que estava explicito que queriam uma função delete,com isso criei um método void PATCH para atualizar essa hora e o atributo novo o STATUS, que é variavel de acordo com o "momento" do incidente.
+  
   
   
 - Criei um método Trasformer para abstrair o builder da camada de serviço:
+	
 	Você avaliador, vai econtrar esse método na interface IncidentTranformer e na classe IncidentTransformerImpl, criei para deixar o código mais limpo e manutenível,após ter  notado que estava repetindo código. 
-	Utilizei da sobrecarga para me ajudar, porém um dos métodos não me pareceu fazer muito sentido e eu pensarei em uma possível refatoração pra isto.
+  Utilizei da sobrecarga para me ajudar, porém um dos métodos não me pareceu fazer muito sentido e eu pensarei em uma possível refatoração pra isto.
   
   
   
