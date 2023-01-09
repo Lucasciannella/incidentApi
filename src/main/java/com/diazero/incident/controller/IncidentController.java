@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -50,14 +51,14 @@ public class IncidentController {
     @PostMapping
     @Operation(summary = "Create a new incident", description = "In this method you will add a new incident to your database")
     @ApiResponse(responseCode = "200", description = "Successful operation")
-    public ResponseEntity<Incident> save(@RequestBody IncidentPostRequestBody incidentPostRequestBody) {
+    public ResponseEntity<Incident> save( @Valid @RequestBody IncidentPostRequestBody incidentPostRequestBody) {
         return new ResponseEntity<>(incidentService.save(incidentPostRequestBody), HttpStatus.CREATED);
     }
 
     @PutMapping
     @Operation(summary = "Update a incident", description = "This method is used to update the entire record of an incident")
     @ApiResponse(responseCode = "200", description = "Successful operation")
-    public ResponseEntity<Incident> replace(@RequestBody IncidentPutRequestBody incidentPutRequestBody) {
+    public ResponseEntity<Incident> replace(@RequestBody @Valid IncidentPutRequestBody incidentPutRequestBody) {
         return ResponseEntity.ok(incidentService.replace(incidentPutRequestBody));
     }
 

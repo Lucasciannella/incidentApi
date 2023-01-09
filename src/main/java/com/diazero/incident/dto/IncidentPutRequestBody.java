@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
 public class IncidentPutRequestBody {
 
     @Schema(name = "Incident Id dto")
-    @NotNull
+    @NotNull(message = "Invalid id, please try again")
     private Long idIncident;
 
     @Schema(name = "Incident name  dto")
-    @NotNull
+    @NotNull(message = "invalid name, please try again")
     private String name;
 
     @Schema(name = "Incident description")
-    @NotNull
+    @NotNull(message = "invalid description, please try again")
     private String description;
 }

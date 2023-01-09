@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 public class IncidentPostRequestBody {
 
     @Schema(name = "incident name dto")
-    @NotNull
+    @NotNull(message = "invalid username, please try again")
     private String name;
 
     @Schema(name = "incident description dto")
-    @NotNull
+    @NotNull(message = "invalid description, please try again ")
     private String description;
 
     @Schema(name = "Incident status")

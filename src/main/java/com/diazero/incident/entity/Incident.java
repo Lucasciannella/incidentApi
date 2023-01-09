@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -21,11 +22,9 @@ public class Incident {
     private Long idIncident;
 
     @Schema(name = "Incident name",example = "SQL INJECTION",required= true)
-    @Column(nullable = false)
     private String name;
 
     @Schema(name = "Incident description",example = "SQL INJECTION are cybe security incident",required= true)
-    @Column(nullable = false)
     private String description;
 
     @Schema(name = "Incident created date", example = "2023/01/07")
@@ -39,6 +38,5 @@ public class Incident {
 
     @Schema(name= "Incident Status", example = "NEW")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Status status;
 }
